@@ -26,7 +26,6 @@ This command-line application integrates with Jira to manage project issues effi
 2. Set up a virtual environment:
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
    ```
 3. Install dependencies:
    ```bash
