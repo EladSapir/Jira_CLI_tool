@@ -15,19 +15,23 @@ RED = "\033[1;31m"
 # Constants
 CONFIG_FILE = "config.ini"
 
+
 # Color Utility Function
 def colored(text, color):
     """Wrap text with the given ANSI color."""
     return f"{color}{text}{RESET}"
+
 
 # Base64 Encode/Decode Functions
 def encode_base64(text):
     """Encode text using Base64."""
     return base64.b64encode(text.encode()).decode()
 
+
 def decode_base64(encoded_text):
     """Decode Base64 text."""
     return base64.b64decode(encoded_text.encode()).decode()
+
 
 # Config Management
 def save_config(base_url, email, api_token):
@@ -44,6 +48,7 @@ def save_config(base_url, email, api_token):
     with open(CONFIG_FILE, 'w') as configfile:
         config.write(configfile)
 
+
 def load_config():
     """Load and decode configuration from a file."""
     config = configparser.ConfigParser()
@@ -57,6 +62,7 @@ def load_config():
     api_token = decode_base64(config['JIRA']['api_token'])
     return {"base_url": base_url, "email": email, "api_token": api_token}
 
+
 # Helper Function for Headers
 def get_headers(email, api_token):
     """Generate HTTP headers for authentication."""
@@ -67,6 +73,7 @@ def get_headers(email, api_token):
         "Content-Type": "application/json"
     }
 
+
 # Core Functionalities
 def setup():
     """Set up Jira CLI configuration."""
@@ -75,6 +82,7 @@ def setup():
     api_token = input("Enter your Jira API token: ").strip()
     save_config(base_url, email, api_token)
     print(colored("Configuration saved successfully!", GREEN))
+
 
 def get_issue():
     """Fetch a Jira issue by key."""
@@ -94,6 +102,7 @@ def get_issue():
         print(f"Status: {issue['fields']['status']['name']}")
     else:
         print(colored(f"Error: Unable to fetch issue. {response.status_code} - {response.text}", RED))
+
 
 def create_issue():
     """Create a new Jira issue."""
@@ -120,6 +129,7 @@ def create_issue():
         print(colored(f"Issue created successfully! Key: {issue['key']}", GREEN))
     else:
         print(colored(f"Error: Unable to create issue. {response.status_code} - {response.text}", RED))
+
 
 def update_issue():
     """Update an existing Jira issue."""
@@ -163,6 +173,7 @@ def update_issue():
     else:
         print(colored(f"Error: Unable to update issue. {response.status_code} - {response.text}", RED))
 
+
 def list_issues():
     """List all issues in a Jira project."""
     config = load_config()
@@ -180,6 +191,7 @@ def list_issues():
     else:
         print(colored(f"Error: Unable to list issues. {response.status_code} - {response.text}", RED))
 
+
 def delete_issue():
     """Delete a Jira issue by key."""
     config = load_config()
@@ -193,6 +205,7 @@ def delete_issue():
         print(colored("Issue deleted successfully!", GREEN))
     else:
         print(colored(f"Error: Unable to delete issue. {response.status_code} - {response.text}", RED))
+
 
 # Menu Display
 def display_menu():
@@ -208,6 +221,7 @@ def display_menu():
     print(colored("6. Setup Configuration", CYAN))
     print(colored("7. Exit", RED))
     print("=" * 60)
+
 
 # Main Loop
 def main():
@@ -241,6 +255,7 @@ def main():
             break
         else:
             print(colored("Invalid choice. Please try again.", RED))
+
 
 if __name__ == "__main__":
     main()
