@@ -19,8 +19,8 @@ This command-line application integrates with Jira to manage project issues effi
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone <repository_url>
-   cd <repository_directory>
+   git clone https://github.com/EladSapir/Jira_CLI_tool
+   cd Jira_CLI_tool
    ```
 2. Set up a virtual environment:
    ```bash
