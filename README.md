@@ -26,7 +26,6 @@ This command-line application integrates with Jira to manage project issues effi
 2. Set up a virtual environment:
    ```bash
    python -m venv .venv
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
    ```
 3. Install dependencies:
    ```bash
@@ -54,4 +53,13 @@ python -m unittest test_main_script.py
 ## Future Improvements
 - Stronger encryption for credentials.
 - Additional functionalities like assigning issues or adding comments.
+
+## Screenshots of working product:
+
+![jira0](https://github.com/user-attachments/assets/a6a57266-76c7-46b5-b85b-a2db4bfcedc4)
+
+![jira1](https://github.com/user-attachments/assets/33aefc56-0016-41dd-a956-8df937274b4d)
+
+![jira2](https://github.com/user-attachments/assets/7f6361ba-0456-45f9-9a7a-451a150e13e5)
+
 
