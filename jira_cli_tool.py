@@ -86,10 +86,11 @@ def handle_api_errors(func):
             return func(*args, **kwargs)
         except RuntimeError as e:
             print(colored(f"Error: {e}", RED))
-        except requests.exceptions.RequestException as e:
-            print(colored(f"Network error: {e}", RED))
         except requests.exceptions.InvalidURL as e:
             print(colored(f"Invalid URL error: {e}", RED))
+        except requests.exceptions.RequestException as e:
+            print(colored(f"Network error: {e}", RED))
+
         except Exception as e:
             print(colored(f"An unexpected error occurred: {e}", RED))
     return wrapper
