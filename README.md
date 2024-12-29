@@ -54,3 +54,12 @@ python -m unittest test_main_script.py
 - Stronger encryption for credentials.
 - Additional functionalities like assigning issues or adding comments.
 
+## Screenshots of working product:
+
+![jira0](https://github.com/user-attachments/assets/a6a57266-76c7-46b5-b85b-a2db4bfcedc4)
+
+![jira1](https://github.com/user-attachments/assets/33aefc56-0016-41dd-a956-8df937274b4d)
+
+![jira2](https://github.com/user-attachments/assets/7f6361ba-0456-45f9-9a7a-451a150e13e5)
+
+
