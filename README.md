@@ -15,6 +15,7 @@ This command-line application integrates with Jira to manage project issues effi
 - **Base64 Encoding**: Credentials are securely stored in an encoded format to protect sensitive data.
 - **Improved CLI Design**: A user-friendly, color-coded interface for easy navigation.
 - **Input Validation**: Ensures user inputs are valid and meaningful.
+- **Additional Jira Features**: supports updating issue, listing all issues in project and deleting issue.
 
 ## Installation
 1. Clone the repository:
@@ -31,10 +32,7 @@ This command-line application integrates with Jira to manage project issues effi
    ```bash
    pip install -r requirements.txt
    ```
-4. Configure the application:
-   ```bash
-   python jira_cli_tool.py --setup
-   ```
+
 
 ## Usage
 Run the application:
