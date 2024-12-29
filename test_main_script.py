@@ -5,6 +5,8 @@ import os
 import base64
 from io import StringIO
 
+# Tests
+
 # Import functions from the main script
 from jira_cli_tool import (
     encode_base64,
