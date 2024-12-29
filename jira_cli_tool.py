@@ -54,12 +54,16 @@ def load_config():
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE)
     if 'JIRA' not in config:
-        print(colored("Error: Configuration not found. Please run setup.", RED))
-        sys.exit(1)
+        raise RuntimeError("Configuration not found. Please run setup.")
 
     base_url = config['JIRA']['base_url']
     email = decode_base64(config['JIRA']['email'])
     api_token = decode_base64(config['JIRA']['api_token'])
+
+    # Validate the base URL
+    if not base_url.startswith("https://"):
+        raise RuntimeError("Invalid base URL in configuration. Please run setup again.")
+
     return {"base_url": base_url, "email": email, "api_token": api_token}
 
 
@@ -74,16 +78,49 @@ def get_headers(email, api_token):
     }
 
 
+# Error Handling Decorator
+def handle_api_errors(func):
+    """Decorator to handle API errors."""
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except RuntimeError as e:
+            print(colored(f"Error: {e}", RED))
+        except requests.exceptions.RequestException as e:
+            print(colored(f"Network error: {e}", RED))
+        except requests.exceptions.InvalidURL as e:
+            print(colored(f"Invalid URL error: {e}", RED))
+        except Exception as e:
+            print(colored(f"An unexpected error occurred: {e}", RED))
+    return wrapper
+
+
 # Core Functionalities
 def setup():
-    """Set up Jira CLI configuration."""
-    base_url = input("Enter your Jira base URL (e.g., https://yourdomain.atlassian.net): ").strip()
-    email = input("Enter your Jira email: ").strip()
-    api_token = input("Enter your Jira API token: ").strip()
-    save_config(base_url, email, api_token)
-    print(colored("Configuration saved successfully!", GREEN))
+    """Set up Jira CLI configuration with input validation."""
+    while True:
+        base_url = input("Enter your Jira base URL (e.g., https://yourdomain.atlassian.net): ").strip()
+        if not base_url or not base_url.startswith("https://"):
+            print(colored("Error: Base URL must start with 'https://'. Please try again.", RED))
+            continue
+
+        email = input("Enter your Jira email: ").strip()
+        if not email or "@" not in email:
+            print(colored("Error: Invalid email format. Please try again.", RED))
+            continue
+
+        api_token = input("Enter your Jira API token: ").strip()
+        if not api_token:
+            print(colored("Error: API token cannot be empty. Please try again.", RED))
+            continue
+
+        # If all inputs are valid, save the configuration and exit the loop
+        save_config(base_url, email, api_token)
+        print(colored("Configuration saved successfully!", GREEN))
+        break
 
 
+@handle_api_errors
 def get_issue():
     """Fetch a Jira issue by key."""
     config = load_config()
@@ -104,6 +141,7 @@ def get_issue():
         print(colored(f"Error: Unable to fetch issue. {response.status_code} - {response.text}", RED))
 
 
+@handle_api_errors
 def create_issue():
     """Create a new Jira issue."""
     config = load_config()
@@ -131,6 +169,7 @@ def create_issue():
         print(colored(f"Error: Unable to create issue. {response.status_code} - {response.text}", RED))
 
 
+@handle_api_errors
 def update_issue():
     """Update an existing Jira issue."""
     config = load_config()
@@ -174,6 +213,7 @@ def update_issue():
         print(colored(f"Error: Unable to update issue. {response.status_code} - {response.text}", RED))
 
 
+@handle_api_errors
 def list_issues():
     """List all issues in a Jira project."""
     config = load_config()
@@ -192,6 +232,7 @@ def list_issues():
         print(colored(f"Error: Unable to list issues. {response.status_code} - {response.text}", RED))
 
 
+@handle_api_errors
 def delete_issue():
     """Delete a Jira issue by key."""
     config = load_config()
@@ -238,23 +279,27 @@ def main():
         display_menu()
         choice = input("Enter your choice: ").strip()
 
-        if choice == "1":
-            get_issue()
-        elif choice == "2":
-            create_issue()
-        elif choice == "3":
-            update_issue()
-        elif choice == "4":
-            list_issues()
-        elif choice == "5":
-            delete_issue()
-        elif choice == "6":
-            setup()
-        elif choice == "7":
-            print(colored("Goodbye!", GREEN))
-            break
-        else:
-            print(colored("Invalid choice. Please try again.", RED))
+        try:
+            if choice == "1":
+                get_issue()
+            elif choice == "2":
+                create_issue()
+            elif choice == "3":
+                update_issue()
+            elif choice == "4":
+                list_issues()
+            elif choice == "5":
+                delete_issue()
+            elif choice == "6":
+                setup()
+            elif choice == "7":
+                print(colored("Goodbye!", GREEN))
+                break
+            else:
+                print(colored("Invalid choice. Please try again.", RED))
+        except RuntimeError as e:
+            print(colored(f"Error: {e}", RED))
+            print(colored("Returning to the main menu.", BLUE))
 
 
 if __name__ == "__main__":
